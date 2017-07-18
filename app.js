@@ -41,6 +41,15 @@ function getGraph(url, contentType){
   });
 }
 
+function getInbox(url){
+  url = url || window.location.pathname;
+  // url = url || window.location.origin + window.location.pathname;
+  console.log(url);
+  getGraph(url, "text/html").then(function(graph){
+    console.log(graph);
+  });
+}
+
 function renderList(graph, subject){
   var s = graph.child(subject);
 
@@ -57,7 +66,8 @@ function renderItem(graph, subject){
   return li;
 }
 
-function init(inbox){
+function init(){
+  var inbox = getInbox();
   getGraph(inbox, "application/ld+json").then(function(graph){
     renderList(graph, inbox);
   });
