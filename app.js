@@ -1,6 +1,7 @@
 var SimpleRDF = (typeof ld !== 'undefined') ? ld.SimpleRDF : undefined;
 var v = {
   "ldpcontains": { "@id": "http://www.w3.org/ns/ldp#contains", "@type": "@id", "@array": true },
+  "ldpinbox": { "@id": "http://www.w3.org/ns/ldp#inbox", "@type": "@id", "@array": false },
   "ldpResource": { "@id": "http://www.w3.org/ns/ldp#Resource", "@type": "@id", "@array": true  },
   "ldpContainer": { "@id": "http://www.w3.org/ns/ldp#Container", "@type": "@id", "@array": true  }
 }
@@ -42,11 +43,10 @@ function getGraph(url, contentType){
 }
 
 function getInbox(url){
-  url = url || window.location.pathname;
-  // url = url || window.location.origin + window.location.pathname;
-  console.log(url);
-  getGraph(url, "text/html").then(function(graph){
-    console.log(graph);
+  url = url || window.location.origin + window.location.pathname;
+  return getGraph(url, "text/html").then(function(graph){
+    var s = graph.child(url);
+    return s.ldpinbox;
   });
 }
 
@@ -67,8 +67,10 @@ function renderItem(graph, subject){
 }
 
 function init(){
-  var inbox = getInbox();
-  getGraph(inbox, "application/ld+json").then(function(graph){
-    renderList(graph, inbox);
+  getInbox().then(function(inbox){
+    getGraph(inbox, "application/ld+json").then(function(graph){
+      renderList(graph, inbox);
+    });
   });
+
 }
