@@ -57,7 +57,12 @@ function getInbox(url){
   });
 }
 
-function getSource(notification){
+function getSource(notification, proxy){
+  // of CORS we need a fudging proxy.
+  // TODO: rdf-translator is not a great solution because the API is a bit slow and times
+  // out and stuff.
+  proxy = proxy || "http://rdf-translator.appspot.com/convert/n3/json-ld/";
+
   return getGraph(notification).then(function(notifGraph){
     var s = notifGraph.child(notification);
     if(s.type.indexOf(v.Announce["@id"]) >= 0){
@@ -65,7 +70,7 @@ function getSource(notification){
         // TODO: this assumes there's only one object in the array, but really 
         // it should add all the results to the same graph as it goes then return 
         // that at the end
-        return getGraph(obj).then(function(sourceGraph){
+        return getGraph(proxy+obj).then(function(sourceGraph){
           return sourceGraph;
         });
       });
