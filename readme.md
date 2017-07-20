@@ -39,7 +39,7 @@ ldprints is an HTML page and a JavaScript app.
 
 ### Notification and article contents
 
-ldprints currently understands which are an ActivityStreams 2.0 `Announce` where the `object` is the article to be archived.
+ldprints currently understands notifications which are an ActivityStreams 2.0 `Announce` where the `object` is the article to be archived.
 
 When fetching the source material, it looks for metadata in the current eprints format.
 
