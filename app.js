@@ -8,7 +8,7 @@ var v = {
   "ldpContainer": { "@id": "http://www.w3.org/ns/ldp#Container", "@type": "@id", "@array": true  },
 
   "Announce": { "@id": "https://www.w3.org/ns/activitystreams#Announce", "@type": "@id", "@array": true },
-  "object": { "@id": "https://www.w3.org/ns/activitystreams#object", "@type": "@id", "@array": true },
+  "object": { "@id": "https://www.w3.org/ns/activitystreams#object", "@type": "@id", "@array": false },
   "actor": { "@id": "https://www.w3.org/ns/activitystreams#actor", "@type": "@id", "@array": true },
   "published": { "@id": "https://www.w3.org/ns/activitystreams#published", "@type": "@id", "@array": true }
 }
@@ -61,18 +61,16 @@ function getSource(notification, proxy){
   // of CORS we need a fudging proxy.
   // TODO: rdf-translator is not a great solution because the API is a bit slow and times
   // out and stuff.
-  proxy = proxy || "http://rdf-translator.appspot.com/convert/n3/json-ld/";
+  proxy = proxy || "http://rdf-translator.appspot.com/convert/detect/json-ld/";
 
   return getGraph(notification).then(function(notifGraph){
     var s = notifGraph.child(notification);
     if(s.type.indexOf(v.Announce["@id"]) >= 0){
-      s.object.forEach(function(obj){
-        // TODO: this assumes there's only one object in the array, but really 
-        // it should add all the results to the same graph as it goes then return 
-        // that at the end
-        return getGraph(proxy+obj).then(function(sourceGraph){
-          return sourceGraph;
-        });
+      // TODO: this assumes there's only one object in the array, but really 
+      // it should add all the results to the same graph as it goes then return 
+      // that at the end
+      return getGraph(proxy+s.object).then(function(sourceGraph){
+        return sourceGraph;
       });
     }
   });
@@ -85,6 +83,7 @@ function renderList(graph, subject){
 
   s.ldpcontains.forEach(function(item){
     getSource(item).then(function(itemGraph){
+      console.log(itemGraph);
       domList.appendChild(renderItem(itemGraph, item));
     });
   });
