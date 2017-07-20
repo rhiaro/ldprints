@@ -1,9 +1,16 @@
 var SimpleRDF = (typeof ld !== 'undefined') ? ld.SimpleRDF : undefined;
 var v = {
+  "type": { "@id": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "@type": "@id", "@array": true },
+
   "ldpcontains": { "@id": "http://www.w3.org/ns/ldp#contains", "@type": "@id", "@array": true },
   "ldpinbox": { "@id": "http://www.w3.org/ns/ldp#inbox", "@type": "@id", "@array": false },
   "ldpResource": { "@id": "http://www.w3.org/ns/ldp#Resource", "@type": "@id", "@array": true  },
-  "ldpContainer": { "@id": "http://www.w3.org/ns/ldp#Container", "@type": "@id", "@array": true  }
+  "ldpContainer": { "@id": "http://www.w3.org/ns/ldp#Container", "@type": "@id", "@array": true  },
+
+  "Announce": { "@id": "https://www.w3.org/ns/activitystreams#Announce", "@type": "@id", "@array": true },
+  "object": { "@id": "https://www.w3.org/ns/activitystreams#object", "@type": "@id", "@array": true },
+  "actor": { "@id": "https://www.w3.org/ns/activitystreams#actor", "@type": "@id", "@array": true },
+  "published": { "@id": "https://www.w3.org/ns/activitystreams#published", "@type": "@id", "@array": true }
 }
 
 function getResource(url, headers) {
@@ -50,17 +57,36 @@ function getInbox(url){
   });
 }
 
+function getSource(notification){
+  return getGraph(notification).then(function(notifGraph){
+    var s = notifGraph.child(notification);
+    if(s.type.indexOf(v.Announce["@id"]) >= 0){
+      s.object.forEach(function(obj){
+        // TODO: this assumes there's only one object in the array, but really 
+        // it should add all the results to the same graph as it goes then return 
+        // that at the end
+        return getGraph(obj).then(function(sourceGraph){
+          return sourceGraph;
+        });
+      });
+    }
+  });
+}
+
 function renderList(graph, subject){
   var s = graph.child(subject);
 
   var domList = document.getElementById("listing");
 
   s.ldpcontains.forEach(function(item){
-    domList.appendChild(renderItem(graph, item));
+    getSource(item).then(function(itemGraph){
+      domList.appendChild(renderItem(itemGraph, item));
+    });
   });
 }
 
 function renderItem(graph, subject){
+  var s = graph.child(subject);
   var li = document.createElement("li");
   li.innerText = subject;
   return li;
