@@ -30,8 +30,11 @@ LDN enables *decentralised* notifications. That means clients and servers are co
 1. I have finished a (version of a) article and I want my institution to archive this for me.
 2. My article-editing software, or some other perhaps totally independent notification sending tool, sends a ping to my institution's ldprints, pointing at my article.
 3. ldprints retrieves my article, parses all the metadata it can find (which I helpfully included in RDFa or whatever), and also takes a full copy of the article and stores it, and adds it to its index.
+4. My article is now listed for people to discover.
 
 ## TODO 
+
+Move these to issues.
 
 ### Decentralisation-y
 
@@ -39,6 +42,7 @@ LDN enables *decentralised* notifications. That means clients and servers are co
 * Actually make the copy from the notification, rather than just dynamically pulling data in from notifications.
 * Make a great portability experience academics who move from one institution to another. Perhaps the person lists their previous institutions eprints their new eprints archive can automatically fetch earlier publications, etc.
 * Handle notifications which are updates and deletes.
+* Authentication etc... maybe signing notifications... other people shouldn't be able to update metadata about my articles (unless I say they can).
 
 ### Orthogonal
 
