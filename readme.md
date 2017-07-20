@@ -32,6 +32,17 @@ LDN enables *decentralised* notifications. That means clients and servers are co
 3. ldprints retrieves my article, parses all the metadata it can find (which I helpfully included in RDFa or whatever), and also takes a full copy of the article and stores it, and adds it to its index.
 4. My article is now listed for people to discover.
 
+ldprints is an HTML page and a JavaScript app. 
+
+* The HTML page points to the repository's Inbox, which can be any LDP container anywhere, or an otherwise LDN-compliant receiver. ([LDN implementations listed here](http://linkedresearch.org/ldn/tests/summary); use one of these or [write your own](https://rhiaro.co.uk/2017/07/diy-inbox)..).
+* The JavaScript app is an LDN Consumer. It finds the Inbox from the HTML page, and reads the notifications it finds in there. From the notification listing, it fetches the articles to be archived and looks for more RDF metadata there.
+
+### Notification and article contents
+
+ldprints currently understands which are an ActivityStreams 2.0 `Announce` where the `object` is the article to be archived.
+
+When fetching the source material, it looks for metadata in the current eprints format.
+
 ## TODO 
 
 Move these to issues.
