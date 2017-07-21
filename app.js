@@ -70,10 +70,34 @@ function getSource(notification, proxy){
       // it should add all the results to the same graph as it goes then return 
       // that at the end
       return getGraph(proxy+s.object).then(function(sourceGraph){
-        return sourceGraph;
+        return [s.object, sourceGraph];
       });
     }
   });
+}
+
+function getTitle(graph){
+
+}
+
+function getAuthors(graph){
+  // eprints
+  // eprint -> bibo:authorList -> rdf:_1 etc
+
+  // dokieli
+  // -> bibo:authorList / schema:author
+}
+
+function getPubType(graph){
+  // eprints
+  // eprint -> bibo:presentedAt -> dct:title, rdf:type (eg. bibo:Conference)
+
+  // schema (sarven/dokieli)
+  // rdf:type (schema:ScholarlyArticle, bibo:Paper), sioc:reply_of -> [some event]
+}
+
+function getYear(graph){
+
 }
 
 function renderList(graph, subject){
@@ -83,14 +107,14 @@ function renderList(graph, subject){
 
   s.ldpcontains.forEach(function(item){
     getSource(item).then(function(itemGraph){
-      console.log(itemGraph);
-      domList.appendChild(renderItem(itemGraph, item));
+      domList.appendChild(renderItem(itemGraph[1], itemGraph[0]));
     });
   });
 }
 
 function renderItem(graph, subject){
   var s = graph.child(subject);
+  console.log(s);
   var li = document.createElement("li");
   li.innerText = subject;
   return li;
