@@ -66,7 +66,7 @@ function getSource(notification, proxy){
   // of CORS we need a fudging proxy.
   // TODO: rdf-translator is not a great solution because the API is a bit slow and times
   // out and stuff.
-  proxy = proxy || "http://rdf-translator.appspot.com/convert/detect/json-ld/";
+  proxy = proxy || "https://rdf-translator.appspot.com/convert/detect/json-ld/";
 
   return getGraph(notification).then(function(notifGraph){
     var s = notifGraph.child(notification);
