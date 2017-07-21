@@ -1,11 +1,16 @@
 var SimpleRDF = (typeof ld !== 'undefined') ? ld.SimpleRDF : undefined;
 var v = {
   "type": { "@id": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "@type": "@id", "@array": true },
+  "label": { "@id": "http://www.w3.org/2000/01/rdf-schema#label" },
 
   "ldpcontains": { "@id": "http://www.w3.org/ns/ldp#contains", "@type": "@id", "@array": true },
   "ldpinbox": { "@id": "http://www.w3.org/ns/ldp#inbox", "@type": "@id", "@array": false },
   "ldpResource": { "@id": "http://www.w3.org/ns/ldp#Resource", "@type": "@id", "@array": true  },
   "ldpContainer": { "@id": "http://www.w3.org/ns/ldp#Container", "@type": "@id", "@array": true  },
+
+  "dctitle": { "@id": "http://purl.org/dc/terms/title" },
+
+  "schemaname": { "@id": "http://schema.org/name" } ,
 
   "Announce": { "@id": "https://www.w3.org/ns/activitystreams#Announce", "@type": "@id", "@array": true },
   "object": { "@id": "https://www.w3.org/ns/activitystreams#object", "@type": "@id", "@array": false },
@@ -77,7 +82,12 @@ function getSource(notification, proxy){
 }
 
 function getTitle(graph){
-
+  // eprints
+  if (graph.dctitle != 'undefined'){
+    return graph.dctitle;
+  }else if(graph.schemaname != 'undefined'){
+    return graph.schemaname;
+  }
 }
 
 function getAuthors(graph){
@@ -116,7 +126,7 @@ function renderItem(graph, subject){
   var s = graph.child(subject);
   console.log(s);
   var li = document.createElement("li");
-  li.innerText = subject;
+  li.innerText = getTitle(s) + " (" + subject + ")";
   return li;
 }
 
