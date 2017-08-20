@@ -34,7 +34,7 @@ LDN enables *decentralised* notifications. That means clients and servers are co
 
 ldprints is an HTML page and a JavaScript app. 
 
-* The HTML page points to the repository's Inbox, which can be any LDP container anywhere, or an otherwise LDN-compliant receiver. ([LDN implementations listed here](http://linkedresearch.org/ldn/tests/summary); use one of these or [write your own](https://rhiaro.co.uk/2017/07/diy-inbox)..).
+* The HTML page points to the repository's Inbox, which can be any LDP container anywhere, or an otherwise LDN-compliant receiver. ([LDN implementations listed here](http://linkedresearch.org/ldn/tests/summary); use one of these or [write your own](https://rhiaro.co.uk/2017/08/diy-ldn)..).
 * The JavaScript app is an LDN Consumer. It finds the Inbox from the HTML page, and reads the notifications it finds in there. From the notification listing, it fetches the articles to be archived and looks for more RDF metadata there. It displays this in a human-friendly way. In the future it will do more cool stuff in the background.
 
 ### Notification and article contents
